@@ -6,11 +6,18 @@ import LoginPage from "./pages/LoginPage";
 import SettingsPage from "./pages/SettingsPage";
 import ProfilePage from "./pages/ProfilePage";
 import { useAuthStore } from "./store/useAuthStore";
+import { useThemeStore } from "./store/useThemeStore";
 import { useEffect } from "react";
 import { Loader } from "lucide-react"
+import { Toaster } from "react-hot-toast";
 
 function App() {
   const { authUser, checkAuth, isCheckingAuth } = useAuthStore();
+  const { theme, setTheme } = useThemeStore();
+  const getTheme = localStorage.getItem("chat-theme") || "dark";
+  if(getTheme !== theme) setTheme(getTheme);
+  
+
   useEffect(() => {
     checkAuth();
   }, [checkAuth]);
@@ -31,6 +38,7 @@ function App() {
         <Route path="/settings" element={<SettingsPage />} />
         <Route path="/profile" element={authUser ? <ProfilePage /> : <Navigate to="/login" />} />
       </Routes>
+      <Toaster />
     </main>
   );
 }
